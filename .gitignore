@@ -1,3 +1,24 @@
+# Dependencies
 node_modules/
-bundle-parent.tar.gz
+
+# Build and bundle outputs
+*.tar.gz
+*.tgz
+dist/
+build/
+out/
+
+# Logs and temp files
 *.log
+*.tmp
+*.swp
+coverage/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
