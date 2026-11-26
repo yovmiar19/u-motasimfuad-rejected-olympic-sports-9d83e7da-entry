@@ -1,23 +1,22 @@
-// Rejected Olympic Sports — one-liner entry.
-//
-// The program writes exactly one line of text to /output/entry.txt:
-// a made-up Olympic event, real enough to sound like a broadcast,
-// absurd enough to be funny. Nothing else is written.
+// One rejected Olympic sport, written as a single broadcast-style line.
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
 
-const LINE =
-  "Synchronized Parallel Parking: Norway's van slid in with four centimetres to spare, and the judges are still arguing about the indicator.";
-
-// The gate allows 1 to 200 characters on a single line. Refuse to write
-// anything that would fail it instead of silently producing a bad entry.
-if (LINE.length < 1 || LINE.length > 200 || LINE.includes("\n")) {
-  throw new Error(`entry line is ${LINE.length} characters; gate needs 1-200 on one line`);
+function buildLine(): string {
+  const event = "Synchronized Parallel Parking:";
+  const action = "Norway's van slid in with four centimetres to spare,";
+  const twist = "and the judges are still arguing about the indicator.";
+  return [event, action, twist].join(" ");
 }
 
-const outPath = process.env.MAKEFUN_OUTPUT_DIR
-  ? `${process.env.MAKEFUN_OUTPUT_DIR}/entry.txt`
-  : "/output/entry.txt";
+const line = buildLine();
 
-mkdirSync(dirname(outPath), { recursive: true });
-writeFileSync(outPath, LINE, "utf8");
+// The scorer gate requires exactly one line of 1-200 characters,
+// so reject anything outside that range before writing the file.
+if (line.length > 200 || line.length < 1 || line.includes("\n")) {
+  throw new Error(`Invalid entry length: ${line.length}`);
+}
+
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+mkdirSync(outputDir, { recursive: true });
+writeFileSync(`${outputDir}/entry.txt`, line, "utf8");
+console.log(line);
